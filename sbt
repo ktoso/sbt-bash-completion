@@ -7,6 +7,8 @@
 _sbt()
 {
     local cur prev buildfile i
+    
+    CACHE='.sbt_completion_cache'
 
     COMPREPLY=()
     _get_comp_words_by_ref cur prev
@@ -16,10 +18,10 @@ _sbt()
         return 0
     else
         if [ -e '.sbt_completion_cache' ]; then
-            COMPREPLY=( $( compgen -W "`cat .sbt_completion_cache`" -- "$cur" ) )
+            COMPREPLY=( $( compgen -W "`cat $CACHE`" -- "$cur" ) )
         else
 
-            COMPREPLY=( $( compgen -W "`sbt tasks | grep '  .*   ' | awk '{ print $1 }' | tee .sbt_completion_cache `" -- "$cur" ) )
+            COMPREPLY=( $( compgen -W "`sbt tasks | grep '  .*   ' | awk '{ print $1 }' | tee $CACHE `" -- "$cur" ) )
         fi
         return 0
     fi
